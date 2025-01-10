@@ -62,6 +62,26 @@ body {
   margin-bottom: 12px;
 }
 
+.password-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.password-container .input-field {
+  margin-bottom: 0;
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #606770;
+}
+
 .input-field:focus {
   outline: none;
   border-color: #1877f2;
@@ -131,7 +151,20 @@ body {
   font-weight: bold;
 }
 
-/* Mobile Responsive Styles */
+.error-message {
+  color: #ff4444;
+  text-align: center;
+  margin-bottom: 10px;
+  display: none;
+}
+
+.success-message {
+  color: #42b72a;
+  text-align: center;
+  margin-bottom: 10px;
+  display: none;
+}
+
 @media screen and (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -170,7 +203,6 @@ body {
   }
 }
 
-/* Small mobile devices */
 @media screen and (max-width: 320px) {
   .logo {
     font-size: 2.5rem;
@@ -187,8 +219,9 @@ body {
   }
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <body>
   <div class="container">
     <div class="logo-section">
@@ -198,9 +231,14 @@ body {
     
     <div class="login-section">
       <div class="login-container">
-        <form action="#" method="POST">
-          <input type="text" class="input-field" placeholder="Email address or phone number" required>
-          <input type="password" class="input-field" placeholder="Password" required>
+        <div id="errorMessage" class="error-message">Incorrect email or password</div>
+        <div id="successMessage" class="success-message">Login successful!</div>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+          <input type="text" id="email" class="input-field" placeholder="Email address or phone number" required>
+          <div class="password-container">
+            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+          </div>
           <button type="submit" class="login-btn">Log In</button>
         </form>
         
@@ -218,4 +256,62 @@ body {
       </div>
     </div>
   </div>
+
+  <script>
+    async function handleLogin(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+
+      try {
+        const response = await mockAuthenticationCheck(email, password);
+        
+        if (response.success) {
+          successMessage.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'https://www.facebook.com/';
+          }, 2000);
+        } else {
+          errorMessage.style.display = 'block';
+        }
+      } catch (error) {
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.style.display = 'block';
+      }
+      
+      return false;
+    }
+
+    function mockAuthenticationCheck(email, password) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const mockValidEmail = "user@example.com";
+          const mockValidPassword = "password123";
+          
+          resolve({
+            success: email === mockValidEmail && password === mockValidPassword
+          });
+        }, 1000);
+      });
+    }
+
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      // Toggle eye icon
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
 </body></html>
